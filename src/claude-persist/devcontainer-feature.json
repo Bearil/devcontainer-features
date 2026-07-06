@@ -1,0 +1,18 @@
+{
+  "id": "claude-persist",
+  "version": "0.1.0",
+  "name": "Claude Code Persistence",
+  "description": "Persist Claude Code sessions, credentials, config and memory across dev container rebuilds; optional shared memory across parallel workspace copies. Pair with named-volume mounts in your devcontainer.json (see README).",
+  "documentationURL": "https://github.com/Bearil/devcontainer-features/tree/main/src/claude-persist",
+  "options": {
+    "tools": {
+      "type": "string",
+      "default": "",
+      "description": "Comma-separated extra CLIs to install: gh, glab, kubectl, gci. Empty = none. (gci needs Go present.)"
+    }
+  },
+  "containerEnv": {
+    "CLAUDE_CONFIG_DIR": "/home/vscode/.claude"
+  },
+  "postCreateCommand": "bash /usr/local/share/claude-persist/post-create.sh ${containerWorkspaceFolder}"
+}
