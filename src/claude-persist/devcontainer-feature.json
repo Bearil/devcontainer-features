@@ -1,6 +1,6 @@
 {
   "id": "claude-persist",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "name": "Claude Code Persistence",
   "description": "Persist Claude Code sessions, credentials, config and memory across dev container rebuilds; optional shared memory across parallel workspace copies. Pair with named-volume mounts in your devcontainer.json (see README).",
   "documentationURL": "https://github.com/Bearil/devcontainer-features/tree/main/src/claude-persist",
