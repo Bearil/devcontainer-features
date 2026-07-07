@@ -13,6 +13,11 @@ install -m 0755 "$FEATURE_DIR/healthcheck.sh" "$SHARE/healthcheck.sh"
 # Workspace files are commonly root-owned while remoteUser differs -> git "dubious ownership".
 git config --system --add safe.directory '*' 2>/dev/null || true
 
+# Windows hosts bind-mount the workspace over 9p/drvfs with CRLF on disk; container git (autocrlf=false
+# by default) then shows the whole working tree as modified. `input` normalizes CRLF->LF only when git
+# reads files for comparison/commit — the files on disk are left untouched. No-op on Linux hosts.
+git config --system core.autocrlf input 2>/dev/null || true
+
 ARCH="$(dpkg --print-architecture 2>/dev/null || echo amd64)"
 TOOLS="${TOOLS:-}"
 want() { case ",$TOOLS," in *",$1,"*) return 0 ;; *) return 1 ;; esac; }
