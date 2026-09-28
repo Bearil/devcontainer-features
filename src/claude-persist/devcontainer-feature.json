@@ -1,6 +1,6 @@
 {
   "id": "claude-persist",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "name": "Claude Code Persistence",
   "description": "Persist Claude Code sessions, credentials, config and memory across dev container rebuilds; optional shared memory across parallel workspace copies. Pair with named-volume mounts in your devcontainer.json (see README).",
   "documentationURL": "https://github.com/Bearil/devcontainer-features/tree/main/src/claude-persist",
@@ -14,5 +14,6 @@
   "containerEnv": {
     "CLAUDE_CONFIG_DIR": "/home/vscode/.claude"
   },
-  "postCreateCommand": "bash /usr/local/share/claude-persist/post-create.sh ${containerWorkspaceFolder}"
+  "postCreateCommand": "bash /usr/local/share/claude-persist/post-create.sh ${containerWorkspaceFolder}",
+  "postStartCommand": "bash /usr/local/share/claude-persist/post-start.sh ${containerWorkspaceFolder}"
 }
