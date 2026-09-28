@@ -9,27 +9,11 @@ set -uo pipefail
 # Arg 1 = workspace folder (the Feature passes ${containerWorkspaceFolder}); falls back to $PWD.
 
 WORKSPACE_DIR="${1:-$PWD}"
-CLAUDE_HOME="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
-SHARED_MEMORY="$HOME/.claude-shared-memory"
 OWNER="$(id -un):$(id -gn)"
-BACKUP="$WORKSPACE_DIR/_scratch/.claude-home-backup"
-MEM_BACKUP="$WORKSPACE_DIR/_scratch/.claude-memory-backup"
+# shellcheck source=lib.sh
+. "$(dirname "$0")/lib.sh"
 
-# Mirror a dir to a host snapshot — only if it has content (never overwrite a good snapshot with an
-# empty/lost volume), via atomic swap (an interruption can't leave a half-written snapshot).
-mirror_atomic() {
-    local src="$1" dst="$2" tmp="$2.tmp"
-    [ -n "$(ls -A "$src" 2>/dev/null || true)" ] || return 0
-    mkdir -p "$(dirname "$dst")"
-    rm -rf "$tmp"
-    if cp -a "$src/." "$tmp/" 2>/dev/null; then
-        rm -rf "$dst" && mv "$tmp" "$dst"
-        echo "[claude-persist] backup refreshed: $dst"
-    else
-        rm -rf "$tmp"
-    fi
-    return 0
-}
+migrate_legacy_snapshots
 
 mkdir -p "$CLAUDE_HOME"
 sudo chown -R "$OWNER" "$CLAUDE_HOME" 2>/dev/null || chown -R "$OWNER" "$CLAUDE_HOME" 2>/dev/null || true

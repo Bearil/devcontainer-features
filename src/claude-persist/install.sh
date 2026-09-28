@@ -8,6 +8,8 @@ SHARE=/usr/local/share/claude-persist
 
 install -d "$SHARE"
 install -m 0755 "$FEATURE_DIR/post-create.sh" "$SHARE/post-create.sh"
+install -m 0755 "$FEATURE_DIR/post-start.sh" "$SHARE/post-start.sh"
+install -m 0644 "$FEATURE_DIR/lib.sh" "$SHARE/lib.sh"
 install -m 0755 "$FEATURE_DIR/healthcheck.sh" "$SHARE/healthcheck.sh"
 
 # Workspace files are commonly root-owned while remoteUser differs -> git "dubious ownership".

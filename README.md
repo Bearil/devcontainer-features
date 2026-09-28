@@ -12,8 +12,11 @@ copies of a workspace — as a single versioned Feature instead of copy-pasted `
 It provides:
 - **Persistence** — `CLAUDE_CONFIG_DIR` points Claude's config at `~/.claude` so config, credentials,
   sessions and memory all live in one place; a `postCreateCommand` seeds/refreshes a host-side
-  disaster-recovery snapshot and migrates a legacy `~/.claude.json` in. Idempotent — a plain rebuild
-  self-configures.
+  disaster-recovery snapshot in `<workspace>/.claude-backup/` and migrates a legacy `~/.claude.json` in.
+  Idempotent — a plain rebuild self-configures. A `postStartCommand` refreshes the memory snapshot on
+  every container start (memory changes daily, rebuilds are rare); the large home snapshot stays
+  rebuild-only. Snapshots from versions before 0.2.0 (`_scratch/.claude-*-backup`) are moved over once.
+  If the workspace root is a git repo, add `.claude-backup/` to its `.gitignore`.
 - **Shared memory (optional)** — if a second volume is mounted, each copy's `projects/<slug>/memory`
   is symlinked to it, so project memory is shared while chat sessions stay per-copy.
 - **git safe.directory** and opt-in CLIs (`gh`, `glab`, `kubectl`, `gci`).
